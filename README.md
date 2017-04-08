@@ -1,7 +1,7 @@
 
-#MyStellarWallter 
+# MyStellarWallter 
 
-##MyStellarWallter introduction
+## MyStellarWallter introduction
 
 MyStellarWallter 是恒星网页版钱包。跨平台支持，你能将其运行到云主机上，也可将其运行在本地电脑上。以供局域网上（或网络上）的任何浏览器访问。
 
@@ -21,7 +21,7 @@ MyStellarWallter 是恒星网页版钱包。跨平台支持，你能将其运行
 
 ## Reference
 
-- Some page layout we refer [stellarterm]
+- Some page layout we refer [desktop-client](https://github.com/stellarchat/desktop-client), it is a good web client. We only refer some HTML and CSS.
 - Backend written by golang. 
 
 
@@ -39,3 +39,6 @@ finished
 # ./bin/stellarwallet
 ```
 然后浏览器输入  127.0.0.1:8888即可(或其它IP)
+
+## Screenshot
+![image](https://github.com/doumadou/MyStellarWallet/blob/master/doc/Screenshot/asset.png)
