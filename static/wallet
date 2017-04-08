@@ -1,0 +1,197 @@
+<html ng-app="myApp" class="ng-scope"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+    <title>StellarWallet</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="/css/auth.css">
+	<link rel="stylesheet" href="/css/balance.css">
+	<link rel="stylesheet" href="/css/history.css">
+	<link rel="stylesheet" href="/css/trade.css">
+<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/angular-route.min.js"></script>
+	<script src="/js/angular-translate.min.js"></script>
+
+	<script src="/js/underscore-min.js"></script>
+</head>
+
+<body>
+  <!-- ngInclude: 'pages/header.html' --><div ng-include="'pages/header.html'" class="ng-scope"><div ng-controller="HeaderCtrl" class="ng-scope">
+    <header ng-show="!showMenu" class="auth ng-hide">
+      <h1 translate="header_wellcome" class="ng-scope">恒星，分布式的全球支付网络</h1>
+    </header>
+    
+	<nav class="navbar navbar-inverse" ng-show="showMenu">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>                        
+	      </button>
+	      <a class="navbar-brand" href="#">恒星钱包</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+	      <ul class="nav navbar-nav">
+	        <li class="dropdown">
+	          <a class="dropdown-toggle ng-binding" data-toggle="dropdown" href="javascript:">历史 <span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="/hist_payments" ng-click="goTo('/hist_payments')" class="ng-binding">转账</a></li>
+	            <li><a href="/hist_trades" ng-click="goTo('/hist_trades')" class="ng-binding">所有操作</a></li>
+	          </ul>
+	        </li>
+	        <li ng-class="{active:isActive('/trade')}"><a href="/trade" ng-click="goTo('/trade')" class="ng-binding">交易</a></li>
+	        <li ng-class="{active:isActive('/balance')}" class="active"><a href="/wallet" ng-click="goTo('/balance')" class="ng-binding">余额</a></li>
+	        <li ng-class="{active:isActive('/send')}" ><a href="/send" ng-click="goTo('/send')" class="ng-binding">发送</a></li>
+	        <li ng-class="{active:isActive('/trust')}"><a href="/trust" ng-click="goTo('/trust')" class="ng-binding">授信</a></li>
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="javascript:" ng-click="goTo('/security')" title="{{.UserName}}" class="ng-binding"><span class="glyphicon glyphicon-user"></span> {{.UserName}}</a></li>
+	        <li><a href="/logout" ng-click="goTo('/settings')" class="ng-binding"><span class="glyphicon glyphicon-cog"></span>退出</a></li>
+	      </ul>
+	    </div>
+	  </div>
+	</nav>
+</div></div>
+  <!-- ngView: --><div class="container ng-scope" ng-view=""><section class="col-xs-12 content ng-scope">
+	<group ng-show="loadState.account || true">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header ng-binding">{{.UserName}} 
+				<a class="btn btn-success btn-sm ng-binding" onclick="window.location.reload()" ng-disabled="working">
+					<span class="glyphicon glyphicon-refresh"></span> 刷新</a>
+			</div>
+			<table class="BalancesTable">
+				<thead>
+					<tr class="BalancesTable__headerRow">
+						<td class="ng-binding">资产</td>
+						<td><sapn class="ng-binding">余额</sapn></td>
+						<td><sapn class="ng-binding">授信额度</sapn></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="BalancesTable__row">
+						<td ng-init="native=gateways.getSourceById('')">
+							<div class="AssetCard AssetCard--fixed" name="Stellar Network" logo="data:image/png;base64, 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" website="" code="XLM" address="">
+	<div class="AssetCard__main">
+		<div class="AssetCard__logo">
+			<img class="AssetCard__logo__image" data-ng-src="data:image/png;base64, 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" src="data:image/png;base64, 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">
+		</div>
+		<div class="AssetCard__content">
+			<div class="AssetCard__header">
+				<span class="AssetCard__code ng-binding">XLM</span> 
+				<a class="AssetCard__federation ng-binding ng-hide" href="unsafe:chrome-extension://ecekfiliblfjibalklbilegpdaghacfj/app.html" target="_blank" ng-show="__website">Stellar Network</a>
+				<span class="AssetCard__federation ng-binding" ng-show="!__website">Stellar Network</span>
+			</div>
+			<p class="AssetCard__issuerAccountId ng-binding" title=""></p>
+		</div>
+	</div>
+</div>
+						</td>
+						<td class="BalancesTable__row__amount"><span class="ng-binding">{{.NativeBalances}}</span></td>
+						<td></td>
+					</tr>
+					{{range .AssetInfo}}
+					<tr class="BalancesTable__row">
+						<td ng-init="native=gateways.getSourceById('')">
+	<div class="AssetCard__main">
+		<div class="AssetCard__logo">
+		<img style="width:50px;height:50px" src="/css/{{.Code}}.svg" />
+		</div>
+		<div class="AssetCard__content">
+			<div class="AssetCard__header">
+				<span class="AssetCard__code ng-binding">{{.Code}}</span> 
+				<a class="AssetCard__federation ng-binding " href="/trade/{{.Issuer}}/{{.Code}}" target="_blank" ng-show="__website">
+				<span class="AssetCard__federation ng-binding" ng-show="!__website">交易市场</span></a>
+			</div>
+			<p class="AssetCard__issuerAccountId ng-binding" title="{{.Issuer}}">{{.Issuer}}</p>
+		</div>
+	</div>
+</div>
+						</td>
+						<td class="BalancesTable__row__amount"><span class="ng-binding">{{.Balance}}</span></td>
+						<td>{{.Limit}}<br/>
+						{{if eq .Balance "0.0000000"}}
+							<a href="javascript:void(0);" onclick="trust({{.Issuer}}, {{.Code}},'0')">删除授信</a>
+						{{else}}
+							<span>当余额为零时可以删除授信</span>	
+						{{end}}
+						</td>
+					</tr>
+					{{end}}
+
+				</tbody>
+				<!-- ngRepeat: (code, sublines) in lines --></table>
+		</div>
+	</div>
+	</group>
+</section></div>
+<!--footer-->
+</div>
+</div>
+
+
+</body>
+	<script type="text/javascript">
+                function addTrust(){
+                    $.ajax({
+                         type:"Post",
+                         //后台获取数据的函数，注意当对该页面重命名时，
+                          //必须手动更改该选项
+                           url: "/trust",
+							data:JSON.stringify({"issuer":$("#issuer").val(),
+								"code": $("#code").val(),
+								"limit": "100000000000.0000000"
+							}),
+                           contentType:"application/json; charset=utf-8",
+                           dataType:"json",
+                           //成功获取数据
+                           success:function (data){
+							if (data.Ret == 0)
+							{
+								alert("操作成功");
+								window.location.reload();
+							} else {
+								alert(data.Reason);
+							}
+                           },
+                           //显示错误                                       
+                           error:function (err){
+                            alert(err + "调用后台程序出现错误，请尝试刷新！");
+                        }
+                     });
+                }   
+                function trust(issuer, code, limit){
+                    $.ajax({
+                         type:"Post",
+                         //后台获取数据的函数，注意当对该页面重命名时，
+                          //必须手动更改该选项
+                           url: "/trust",
+							data:JSON.stringify({"issuer":issuer,
+								"code":code,
+								"limit": limit
+							}),
+                           contentType:"application/json; charset=utf-8",
+                           dataType:"json",
+                           //成功获取数据
+                           success:function (data){
+							if (data.Ret == 0)
+							{
+								alert("操作成功");
+								window.location.reload();
+							} else {
+								alert(data.Reason);
+							}
+                           },
+                           //显示错误                                       
+                           error:function (err){
+                            alert(err + "调用后台程序出现错误，请尝试刷新！");
+                        }
+                     });
+                }   
+
+
+	</script>
+</html>

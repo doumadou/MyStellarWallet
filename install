@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ ! -f install ]; then
+    echo 'install must be run within its container folder' 1>&2
+    exit 1
+fi
+
+CURDIR=`pwd`
+OLDGOPATH="$GOPATH"
+if [ -z $OLDGOPATH ];then
+	export GOPATH="$CURDIR"
+else
+	export GOPATH="$CURDIR:$OLDGOPATH"
+fi
+
+if [ ! -d log ]; then
+    mkdir log
+fi
+
+mkdir -p bin
+
+go get github.com/stellar/go
+go get github.com/agl/ed25519
+go get github.com/getsentry/raven-go
+go get github.com/pkg/errors
+go get github.com/stretchr/testify
+go get github.com/manucorporat/sse
+go get github.com/nullstyle/go-xdr/xdr3
+
+gofmt -w src
+
+go install stellarwallet
+
+echo 'finished'

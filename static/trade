@@ -1,0 +1,531 @@
+<html ng-app="myApp" class="ng-scope"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+    <title>StellarWallet</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="/css/auth.css">
+	<link rel="stylesheet" href="/css/balance.css">
+	<link rel="stylesheet" href="/css/history.css">
+	<link rel="stylesheet" href="/css/trade.css">
+<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/angular-route.min.js"></script>
+	<script src="/js/angular-translate.min.js"></script>
+
+	<script src="/js/underscore-min.js"></script>
+<style type="text/css">
+.table0 {
+    font-family: "宋体";
+    font-size: 14px;
+    width: 400px;      
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #c4cdd4;     
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #c4cdd4;      
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: #c4cdd4;       
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: #c4cdd4;
+}
+.table0  tr {
+    height : 25px;
+    padding-left:5px;
+    text-align: left;
+}
+.table0 th {
+    color: #4c7c9b;
+    font-weight: normal;
+    background-color: #f1f1f1;
+    height: 25px;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: #c4cdd4;
+}
+.table0 td {
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: #c4cdd4;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #c4cdd4;
+}
+</style>
+</head>
+
+<body>
+  <!-- ngInclude: 'pages/header.html' --><div ng-include="'pages/header.html'" class="ng-scope"><div ng-controller="HeaderCtrl" class="ng-scope">
+    <header ng-show="!showMenu" class="auth ng-hide">
+      <h1 translate="header_wellcome" class="ng-scope">恒星，分布式的全球支付网络</h1>
+    </header>
+    
+	<nav class="navbar navbar-inverse" ng-show="showMenu">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>                        
+	      </button>
+	      <a class="navbar-brand" href="#">恒星钱包</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+	      <ul class="nav navbar-nav">
+	        <li class="dropdown">
+	          <a class="dropdown-toggle ng-binding" data-toggle="dropdown" href="javascript:" aria-expanded="false">历史 <span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="/hist_payments" ng-click="goTo('/hist_payments')" class="ng-binding">转账</a></li>
+	            <li><a href="/hist_trades" ng-click="goTo('/hist_trades')" class="ng-binding">所有操作</a></li>
+	          </ul>
+	        </li>
+	        <li ng-class="{active:isActive('/trade')}" class="active"><a href="/trade" ng-click="goTo('/trade')" class="ng-binding">交易</a></li>
+	        <li ng-class="{active:isActive('/balance')}" class=""><a href="/wallet" ng-click="goTo('/balance')" class="ng-binding">余额</a></li>
+	        <li ng-class="{active:isActive('/send')}" class=""><a href="/send" ng-click="goTo('/send')" class="ng-binding">发送</a></li>
+	        <li ng-class="{active:isActive('/trust')}" class=""><a href="/trust" ng-click="goTo('/trust')" class="ng-binding">授信</a></li>
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="javascript:" ng-click="goTo('/security')" title="{{.user.UserName}}" class="ng-binding"><span class="glyphicon glyphicon-user"></span>{{.user.UserName}}</a></li>
+	        <li><a href="/logout" ng-click="goTo('/settings')" class="ng-binding"><span class="glyphicon glyphicon-cog"></span>退出</a></li>
+	      </ul>
+	    </div>
+	  </div>
+	</nav>
+</div></div>
+  <!-- ngView: --><div class="container ng-scope" ng-view=""><section class="col-xs-12 content ng-scope">
+	<group ng-show="loadState.account || true">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+				<div class="OfferTables island__sub">
+					<div class="OfferTables__tables island__sub__division">
+						<h3 class="island__sub__division__title ng-scope" translate="base_asset">基础货币</h3>
+					</div>
+					<div class="OfferTables__table island__sub__division">
+						<h3 class="island__sub__division__title ng-scope" translate="counter_asset">对手方货币</h3>
+					</div>
+				</div>
+				
+				<div class="PairPicker__pair">
+					<div class="AssetPair">
+						<div class="AssetPair__card">
+							<div class="AssetCard AssetCard--fixed">
+								<div class="AssetCard__main">
+									<div class="AssetCard__logo">
+										<img class="AssetCard__logo__image" data-ng-src="data:image/png;base64, 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" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAMAUExURUdwTFlqdFpqcVtqckFBQVpqcVppclBwcOK2hFppcVpqcltqclppcVppcVtqcZaWllxqclpqclpqcWNzeFtqcXJ3d5SUlFZfe/GGHFxmcFppcVhrdFppcVtqcltqcFtqcFhnb1tqcVxrc1pqclppcfCHEFppcVpqcZSUlJmZmZeXl+yBFv+GHOyBFux/FltqcllqcVtqceyAFlpqcWRkeFxrc19udltpce6AFu6BFpaWllpqcVtqcVtqcu2BFpaWlpaWlpmZmVtpcZaWlpeXl5eXl5aWllppcVlpce2BF1xpcu2BFu6AFlppcVtqc2Z1fJaWlpaWlltpcqu+xZiYmOyBFpeXl5eXl5eXl5qampaWlpaWluuBFu2DGu2AF+yBFu2AF+yBFu2AFuqCFFtocu2BFuyBFu6CFmR1fl9sdpmZmZSUlO6BGJFyUJeXl+2BFpaWluuAFZWVlZaWlpeXl5aWlpaWluB+H2prZ9zy+Vtqcv7+/u2BF+67GN30+////1ppceD2/VlocN70/FdmblZlbd/1/F5tdVhnb1NialVkbF1sdOH4/tvx+Nrw96G0u6zAx+L4/29/h9nv9s/k69Xr8mRze5Slre1/F/CAFdjt9GZ2fnuNlJyutmBvd7nN1W18hGJxee2GF1xrc7vP19Pp8IeZocXa4crf52l5ge2KF+63GKi7w4qbo3ODik5eZoGSmu69GLTIz2h3f3qKkcjd5JOdon6Pl/G8F+6yGJ6wuJ+xue6kF2t7g7DEy3WFje6sGKa5waO2vuP6/5ipsbrBxL/U28HW3YudpYSVnMfMz1lpc+2UF+2PF+2EF5aosN3z+u6cGMPX3u6oF2V0fdHm7VZmcKy0t1xqcI6gp9ba3PO+Ft3f4YiDV4yWnPSDE+vs7fb394iTmLfL0u6dGMDFyJ6nq8TJzLLGzmdxa6SssOy6Gsx7LOWqHWVsbKeVRMypLH5zXLS7vrKaPe6/GGtzac7j6oCMkubo6dWtKFFkduq5GnFsZc6aK7OaPYmbohy4UwwAAAB5dFJOUwAPLO4B+nIEAfdoxISe3Nt/5o0UUAkGBxIa6SOI/CdWHvBjypIIqtQPEivtBJdDekg4+OMMloj8qXabrzNCLF0+C7ZvZ73s8lrlOs1bvVQ7ztXP/zbejYXIHKmwTx1XfLyIZyVO1/laWW4ZJGq7IPV8XTXytFN6+68Lyom3AAAF0UlEQVRo3u2Yd1wTZxjHTzBLNooMmQLiXkBBBXEUtK7aUnf33nvd9RIu54UsSCBikrIRwnAAKkNxi5sWr25t3R12b7rH3WUj+Sf33qf9I78/c5/PffO8z/P8nvc5CPLII488+p/Ja2TCnHv9/f1CuXm9ICWa74NgWK1aXilH7uACMSjTNwmXqfe0HTdoi7ZpifihwBEhfB+RiijvutlgkhRIKem97wbNGBLEk5V1lZQWkiTMSHqRGAmUMHiEDybfUwTnw3ZJtilThwNkhA7h4c0HyALYSSUynxSACffDFIdK8klnBmxq8h4Erm7nYLV1cH8EDK8vR8CV1yhse6MEvl2lxwhg5RWMNDXQjPwCuBQudki95hDxNCBGTJq6inqzRFplaO1sNdTZU1OolT0DhhEeT1RIYZjsK6/EZCoZLu802SibZYFgGoSP66jKJRvLFDUdJy6d6KjBa2wJylWBca9Yb+QUCZOmJuLKtTxav97At/dZKEWAIDMIQyEMdx8nblzPe4dW3vVf8GO245oEgjEMq26nkt5QU/ORmUFRrsmaGkhL4oeAsJPk2goqI1Ktus3KoChXVLcYiOYkMQwAxBfXlVLvK7ioOO8AOdyiLWSasV7hxZ4RnayqosoXLt5C/OAA+aylQsPYyj6cva0Igol6psELDPinDpDzLQfMBlmbxN4go7HKs+bxVCSvdoA0YzfpnJBVSgBXCR98F3P2VJuUyT+xVdcJZXMfE98WVpMxegk/0Jfvi+n6LA5SfFBZbanhvEvbES19iOQ6eUSG22YVmTxPxIuK4kXJD9osl6xX6g8zHX+4TNHJNHyxVrHYvdMSxPohVmE6hyGiqUdkNR1fdOhVSOtaBruujOdeK4YHptkYiKJOaoeQ8IE2vbJFqW/bbP5VUqH2F7jDWBBvRyCqf6SOY5CUmo7cKrp1xGT+lTxVhmS6ZVQiBwZWWdJ/3JK0rKN3H57g1u0NcRTRpYFdi9yiig91Zzo5MTBdI+makV+hSnbHtkbynCDqrnzXDGmuOs0d/52COKtJ4zoQ8sgZhO8GY6hIFOcdERThPc+cfMVeqetAzupwP3eS/njw5FhmPfCan+oThxDlxa7jKO1UzRGw9cWhMVhtu8vDIiX1RFIsgHkoM7gu37WH1KIM9gwoqbLOddb3ypElIK4o8epcV/Wbf1SP86HBQO5BZzZ3DxiLtLFJkQACQfm9b4/6eOkAywJp0mHIDEDbe+IL3+DVRwtvX0ha6R6KBsIQTrv61ffn5AdN/Rqy8CROQxKAQGZORd/9+tsL58qPOm2i3bswjIbEAYEsRI0fiMXffd6jz3VITHGu1ddGAGA8haK9m8TiHV9evqA8tt62tdfJrZD5ADKyjAmE0oc//qyqvmlee8mGPZgVAmC9WvQk2rufgYh3/Hb590qDRkIXb7PCNgaC2UPSUXTjTrFFf/zd01PdXkBK9+EIQMhjT6Do+5usEPGOv/5EkIr2clwUZYOwX68mTkXR92yMrfuvvvV2nEyp8I+ZYYPEsIY8ijpAfjrda0xPzIwcFegFhfsDK+Hxj6D249q6uxddNpMysxB6EnpZGCLWgYyfQEHQ0wxj08co+tIr9meRZsgoMBDjht07d+7fvdGIotMcv0gFMZDJ7CEP0ZEYjRs29hopxvNO979JNCMIwDeu+1G7pi4SOl/OIihIpIA95IGFNsZdE/s9S1mMIN4LQHjwg+MsiAlhtz1LpdIuAAGBJqaPQ8c9PG3mQBd/EW8KoM9oiWFhYYnCgZ5M5vlBnCvDX8A9JJRt+c4ezv2fhJZP554xK+BZzhmzs+/kGiGElq/hPiVv5IyBoLljOGWsem0WBGXljOaSMTx7BQSNzbmP00Dmvh4CjV7JbeZfDHgVGvzm6hBOIUtfpg4rYCynjOnZVJvcw+1hZQVQlbtmNaeM5wKoopobIOS0eqevEEKrVnKbkKyldJtz2oWQcOks7g1eOFoIeeSRR/+R/gUIJcHACBXGEwAAAABJRU5ErkJggg==">
+									</div>
+									<div class="AssetCard__content">
+										<div class="AssetCard__header">
+											<span class="AssetCard__code ng-binding">XLM</span> 
+											<span class="AssetCard__federation ng-binding">Stellar Network</span>
+										</div>
+										<p class="AssetCard__issuerAccountId ng-binding" title=""></p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="AssetPair__separator"></div>
+						<div class="AssetPair__card">
+							<div class="AssetCard AssetCard--fixed">
+								<div class="AssetCard__main">
+									<div class="AssetCard__logo">
+			<img style="width:50px;height=50px;" src="/css/{{.code}}.svg"/>
+									</div>
+									<div class="AssetCard__content">
+										<div class="AssetCard__header">
+											<span class="AssetCard__code ng-binding">{{.code}}</span> 
+											<span class="AssetCard__federation ng-binding"></span>
+										</div>
+										<p class="AssetCard__issuerAccountId ng-binding" title="">{{.issuer}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="PairPicker__auxInfo ng-binding" ng-show="!show_pair">
+					为了交易其他资产，你可以选择 <a href="javascript:" ng-click="choosePair()" class="ng-binding">交易对</a>
+				</div>
+				<div class="PairPicker__auxInfo ng-binding ng-hide" ng-show="show_pair">
+					回到 <a href="javascript:" ng-click="choosePair()" class="ng-binding">交易页面</a>
+				</div>
+		</div>
+		
+		<div class="so-back islandBack islandBack--t ng-hide" ng-show="show_pair">
+			<div class="island">
+				<div class="island__header ng-scope" translate="trade_pick">选择交易资产</div>
+				<div class="AddTrustFromDirectory">
+					<div class="row" ng-init="native=gateways.getSourceById('')">
+						<div class="row__fixedAsset">
+							<div class="AssetCard AssetCard--fixed" name="Stellar Network" logo="data:image/png;base64, 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" website="" code="XLM" address="">
+	<div class="AssetCard__main">
+		<div class="AssetCard__logo">
+			<img class="AssetCard__logo__image" data-ng-src="data:image/png;base64, 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" src="data:image/png;base64, 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">
+		</div>
+		<div class="AssetCard__content">
+			<div class="AssetCard__header">
+				<span class="AssetCard__code ng-binding">XLM</span> 
+				<a class="AssetCard__federation ng-binding ng-hide" href="unsafe:chrome-extension://ecekfiliblfjibalklbilegpdaghacfj/app.html" target="_blank" ng-show="__website">Stellar Network</a>
+				<span class="AssetCard__federation ng-binding" ng-show="!__website">Stellar Network</span>
+			</div>
+			<p class="AssetCard__issuerAccountId ng-binding" title=""></p>
+		</div>
+	</div>
+</div>
+						</div>
+						<div class="row__shareOption">
+							<button class="s-button btn btn-success ng-scope" ng-click="pick('base', 'XLM', '')" translate="as_base">选作基础货币</button>
+						</div>
+						<div class="row__shareOption">
+							<button class="s-button btn btn-success ng-scope" ng-click="pick('counter', 'XLM', '')" translate="as_counter">选作对手方货币</button>
+						</div>
+					</div>
+					<!-- ngRepeat: (code, sublines) in lines -->
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="island island--pb" ng-show="!show_pair">
+			<div class="OfferMakers island__sub">
+				<div class="OfferMakers_maker island__sub__division">
+					<div>
+						<h3 class="island__sub__division__title island__sub__division__title--left ng-binding">买 XLM</h3>
+						<table class="OfferMaker__table">
+							<tbody>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label ng-scope" translate="order_amount">数量</td>
+									<td class="OfferMaker__table__input">
+										<input id="buy_amount" type="text" class="OfferMaker__table__input__input ng-pristine ng-untouched ng-valid ng-empty" ng-model="buy_amount" ng-change="calculate('buy_amount')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label ng-scope" translate="price_of_each">单价</td>
+									<td class="OfferMaker__table__input">
+										<input id="buy_price" type="text" class="OfferMaker__table__input__input ng-pristine ng-untouched ng-valid ng-empty" ng-model="buy_price" ng-change="calculate('buy_price')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label ng-binding">委托总额 ({{.code}})</td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input ng-pristine ng-untouched ng-valid ng-empty" ng-model="buy_volume" ng-change="calculate('buy_volume')">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="OfferMaker__overview">
+							<div class="OfferMaker__youHave ng-binding">
+								你拥有 0 {{.code}}
+							</div>
+							<div class="s-alert s-alert--success OfferMaker__message ng-scope ng-hide" ng-show="buy_ok" translate="offer_success">下单成功</div>
+							<div class="s-alert s-alert--error OfferMaker__message ng-binding ng-hide" ng-show="buy_fail"></div>
+							<button class="s-button btn btn-success ng-binding" onclick="createoffer('BUY')" ng-disabled="buying">买 XLM</button>
+						</div>
+					</div>
+				</div>
+				<div class="OfferMakers_maker island__sub__division">
+					<div>
+						<h3 class="island__sub__division__title island__sub__division__title--left ng-binding">卖 XLM</h3>
+						<table class="OfferMaker__table">
+							<tbody>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label ng-scope" translate="order_amount">数量</td>
+									<td class="OfferMaker__table__input">
+										<input id="sell_amount" type="text" class="OfferMaker__table__input__input ng-pristine ng-untouched ng-valid ng-empty" ng-model="sell_amount" ng-change="calculate('sell_amount')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label ng-scope" translate="price_of_each">单价</td>
+									<td class="OfferMaker__table__input">
+										<input type="text" id="sell_price" class="OfferMaker__table__input__input ng-pristine ng-untouched ng-valid ng-empty" ng-model="sell_price" ng-change="calculate('sell_price')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label ng-binding">委托总额 ({{.code}})</td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input ng-pristine ng-untouched ng-valid ng-empty" ng-model="sell_volume" ng-change="calculate('sell_volume')">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<div class="OfferMaker__overview">
+							<div class="OfferMaker__youHave ng-binding">
+								你拥有 {{.user.NativeBalances}} XLM
+							</div>
+							<div class="s-alert s-alert--success OfferMaker__message ng-hide" ng-show="sell_ok">Offer successfully created</div>
+							<div class="s-alert s-alert--error OfferMaker__message ng-binding ng-hide" ng-show="sell_fail"></div>
+							<button class="s-button btn btn-success ng-binding" onclick="createoffer('SELL')" ng-disabled="selling">卖 XLM</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="island island--pb" ng-show="!show_pair">
+			<div class="island__header ng-binding">委托单
+				<a class="btn btn-success btn-sm ng-binding" onclick="refreshBook()" ng-disabled="working">
+					<span class="glyphicon glyphicon-refresh"></span> 刷新</a>
+			</div>
+			<div class="OfferTables island__sub">
+				<div class="island__sub__division">
+					<h3 class="island__sub__division__title ng-scope" translate="buy_offers">买单</h3>
+					<div class="OfferTable">
+						<div class="OfferTable__header">
+							<div class="OfferTable__header__item ng-scope" translate="price">价格</div>
+							<div class="OfferTable__header__item ng-binding">XLM</div>
+							<div class="OfferTable__header__item ng-binding">{{.code}}</div>
+						</div>
+						<table id="book_bids" width="98%" border="0" cellspacing="0" cellpadding="0"  class="table0">
+						</table>
+						
+					</div>
+				</div>
+				<div class="island__sub__division">
+					<h3 class="island__sub__division__title ng-scope" translate="sell_offers">卖单</h3>
+					<div class="OfferTable">
+						<div class="OfferTable__header">
+							<div class="OfferTable__header__item ng-scope" translate="price">价格</div>
+							<div class="OfferTable__header__item ng-binding">XLM</div>
+							<div class="OfferTable__header__item ng-binding">{{.code}}</div>
+						</div>
+						<table id="book_asks" width="98%" border="0" cellspacing="0" cellpadding="0"  class="table0">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="island" ng-show="!show_pair">
+			<div class="island__header ng-binding">管理委托
+				<a class="btn btn-success btn-sm ng-binding" onclick="refreshOffer()" ng-disabled="working">
+					<span class="glyphicon glyphicon-refresh"></span> 刷新</a>
+			</div>
+			<div class="island--pb">
+				<div class="ManageOffers island__sub">
+					<div class=" island__sub__division">
+						<h3 class="island__sub__division__title ng-scope" translate="your_buy_offers">我的买单</h3>
+						<table id="my_bids" class="ManageOffers__table"><tbody>
+							<tr class="ManageOffers__table__header">
+								<td class="ManageOffers__table__header__item ng-scope" translate="price">价格</td>
+								<td class="ManageOffers__table__header__item">XLM</td>
+								<td class="ManageOffers__table__header__item">CNY</td>
+								<td class="ManageOffers__table__header__item">管理</td>
+							</tr>
+						</tbody></table>
+					</div>
+					<div class="island__sub__division">
+						<h3 class="island__sub__division__title ng-scope" translate="your_sell_offers">我的卖单</h3>
+						<table id="my_asks"class="ManageOffers__table"><tbody>
+							<tr class="ManageOffers__table__header">
+								<td class="ManageOffers__table__header__item ng-scope" translate="price">价格</td>
+								<td class="ManageOffers__table__header__item">XLM</td>
+								<td class="ManageOffers__table__header__item">CNY</td>
+								<td class="ManageOffers__table__header__item">管理</td>
+							</tr>
+						</tbody></table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	</group>
+</section></div>
+
+<div class="ng-scope"><div class="footer ng-scope" ng-controller="FooterCtrl">
+  <div class="container">
+      <div class="col-xs-12 col-sm-3" style="width:75%">
+      	<p class="text-muted">捐赠XLM: GDEQA4EDG7E5KRMVVNZ5LHWKJ5WXVSWZZLSKSNDBKTP2QPVYA2H2FCWJ</p>
+      </div>
+      <div class="col-xs-12 col-sm-9 right-links" style="width:25%">
+      	<ul class="nav navbar-nav navbar-right" role="menu">
+	    	<li><a href="javascript:" ng-click="changeLanguage('en')">
+	      		<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAIAAAD5gJpuAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHzSURBVHjaYkxOP8IAB//+Mfz7w8Dwi4HhP5CcJb/n/7evb16/APL/gRFQDiAAw3JuAgAIBEDQ/iswEERjGzBQLEru97ll0g0+3HvqMn1SpqlqGsZMsZsIe0SICA5gt5a/AGIEarCPtFh+6N/ffwxA9OvP/7//QYwff/6fZahmePeB4dNHhi+fGb59Y4zyvHHmCEAAAW3YDzQYaJJ93a+vX79aVf58//69fvEPlpIfnz59+vDhw7t37968efP3b/SXL59OnjwIEEAsDP+YgY53b2b89++/awvLn98MDi2cVxl+/vl6mituCtBghi9f/v/48e/XL86krj9XzwEEEENy8g6gu22rfn78+NGs5Ofr16+ZC58+fvyYwX8rxOxXr169fPny+fPn1//93bJlBUAAsQADZMEBxj9/GBxb2P/9+S/R8u3vzxuyaX8ZHv3j8/YGms3w8ycQARmi2eE37t4ACCDGR4/uSkrKAS35B3TT////wADOgLOBIaXIyjBlwxKAAGKRXjCB0SOEaeu+/y9fMnz4AHQxCP348R/o+l+//sMZQBNLEvif3AcIIMZbty7Ly6t9ZmXl+fXj/38GoHH/UcGfP79//BBiYHjy9+8/oUkNAAHEwt1V/vI/KBY/QSISFqM/GBg+MzB8A6PfYC5EFiDAABqgW776MP0rAAAAAElFTkSuQmCC" title="English" alt="English">
+	        </a></li>
+	    	<li><a href="javascript:" ng-click="changeLanguage('cn')">
+	      		<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAIAAAD5gJpuAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAFqSURBVHjaYrzOwPAPjJgYQEDAleHVbhADIvgHLPgHiQ0QQCxAlkR9NW8sw+cV/1gV/7Gb/hV4+vfzhj8Mv/78//Pn/+/f/8AkhH1t0yaAAAJp4I37zyz2lDfu79uqv/++/WYz+cuq/vvLxt8gdb+A5K9/v34B2SyyskBLAAII5JAva/7/+/z367a/f3/8ZuT9+//Pr78vQUrB6n4CSSj6/RuoASCAWEDO/fD3ddEfhv9/OE3/sKj8/n7k9/fDQNUIs/+DVf8HawAIIJCT/v38C3Hr95N/GDh/f94AVvT7N8RUBpjxQAVADQABBNLw/y/Ifwy/f/399ufTOpDBEPf8g5sN0QBEDAwAAQTWABEChgOSA9BVA00E2wAQQCANQBbEif/AzoCqgLkbbBYwWP/+//sXqBYggFhAkfL7D7OkJFCOCSj65zfUeFjwg8z++/ffX5AGoGKAAGI8jhSRyIw/SJH9D4aAYQoQYAA6rnMw1jU2vQAAAABJRU5ErkJggg==" title="中文 (中国)" alt="中文 (中国)">
+		    </a></li>
+		</ul>
+      </div>
+  </div>
+</div>
+</div>
+
+
+</body>
+	<script type="text/javascript">
+                function refreshOffer(){
+                    $.ajax({
+                         type:"Post",
+                         //后台获取数据的函数，注意当对该页面重命名时，
+                          //必须手动更改该选项
+                           url: "/refreshOffer",
+							data: {{.user.UserName}},
+                           contentType:"application/json; charset=utf-8",
+                           dataType:"json",
+                           //成功获取数据
+                           success:function (data){
+							if (data.Ret == 0)
+							{
+            					var tab=document.getElementById("my_bids"); 
+            					var rows=tab.rows.length; 
+								for(var i=1;i<rows;i++){
+        							tab.deleteRow(1);
+    							}
+            					var tab=document.getElementById("my_asks"); 
+            					var rows=tab.rows.length; 
+								for(var i=1;i<rows;i++){
+        							tab.deleteRow(1);
+    							}
+            					for(var i=0;i<data.Data._embedded.records.length && i <= 10;i++){ 
+									if ( data.Data._embedded.records[i].selling.asset_type == "native" ) {
+            					    	var tab=document.getElementById("my_asks"); 
+            					    	var rows=tab.rows; 
+            					    	var row1=tab.insertRow(rows.length); 
+            					    	row1.insertCell(0).innerHTML="&nbsp;"+ (data.Data._embedded.records[i].price); 
+            					    	row1.insertCell(1).innerHTML="&nbsp;"+ ((data.Data._embedded.records[i].price) * data.Data._embedded.records[i].amount);
+            					    	row1.insertCell(2).innerHTML="&nbsp;"+ data.Data._embedded.records[i].amount;
+            					    	row1.insertCell(3).innerHTML="<a href='javascript:void(0);' onclick='cancelOffer("+ data.Data._embedded.records[i].id + ")'>撤消</a>";
+									} else {
+            					    	var tab=document.getElementById("my_bids"); 
+            					    	var rows=tab.rows; 
+            					    	var row1=tab.insertRow(rows.length); 
+            					    	row1.insertCell(0).innerHTML="&nbsp;"+ ( 1 / data.Data._embedded.records[i].price); 
+            					    	row1.insertCell(1).innerHTML="&nbsp;"+ (data.Data._embedded.records[i].amount * data.Data._embedded.records[i].price);
+            					    	row1.insertCell(2).innerHTML="&nbsp;"+ data.Data._embedded.records[i].amount;
+            					    	row1.insertCell(3).innerHTML="<a href='javascript:void(0);' onclick='cancelOffer("+ data.Data._embedded.records[i].id + ")'>撤消</a>";
+									}
+            					}
+								alert("发送成功");
+							} else {
+								alert(data.Reason);
+							}
+                           },
+                           //显示错误                                       
+                           error:function (err){
+                            alert(err + "调用后台程序出现错误，请尝试刷新！");
+                        }
+                     });
+                }   
+                function refreshBook(){
+                    $.ajax({
+                         type:"Post",
+                         //后台获取数据的函数，注意当对该页面重命名时，
+                          //必须手动更改该选项
+                           url: "/refreshBook",
+							data:JSON.stringify({"issuer":{{.issuer}},
+								"code":{{.code}},
+							}),
+                           contentType:"application/json; charset=utf-8",
+                           dataType:"json",
+                           //成功获取数据
+                           success:function (data){
+							if (data.Ret == 0)
+							{
+            					var tab=document.getElementById("book_bids"); 
+            					var rows=tab.rows.length; 
+								for(var i=1;i<rows;i++){
+        							tab.deleteRow(1);
+    							}
+            					var tab=document.getElementById("book_asks"); 
+            					var rows=tab.rows.length; 
+								for(var i=1;i<rows;i++){
+        							tab.deleteRow(1);
+    							}
+            					for(var i=0;i<data.Data.bids.length && i <= 10;i++){ 
+            					    var tab=document.getElementById("book_bids"); 
+            					    var rows=tab.rows; 
+            					    var row1=tab.insertRow(rows.length); 
+            					    row1.insertCell(0).innerHTML="&nbsp;"+ data.Data.bids[i].price; 
+            					    row1.insertCell(1).innerHTML="&nbsp;"+ (data.Data.bids[i].amount / data.Data.bids[i].price);
+            					    row1.insertCell(2).innerHTML="&nbsp;"+ data.Data.bids[i].amount;
+            					}
+            					for(var i=0;i<data.Data.asks.length && i <= 10;i++){ 
+            					    var tab=document.getElementById("book_asks"); 
+            					    var rows=tab.rows; 
+            					    var row1=tab.insertRow(rows.length); 
+            					    row1.insertCell(0).innerHTML="&nbsp;"+ data.Data.asks[i].price; 
+            					    row1.insertCell(1).innerHTML="&nbsp;"+ data.Data.asks[i].amount;
+            					    row1.insertCell(2).innerHTML="&nbsp;"+ (data.Data.asks[i].price * data.Data.asks[i].amount);
+            					}
+								alert("发送成功");
+							} else {
+								alert(data.Reason);
+							}
+                           },
+                           //显示错误                                       
+                           error:function (err){
+                            alert(err + "调用后台程序出现错误，请尝试刷新！");
+                        }
+                     });
+                }   
+
+                function createoffer(type){
+                    $.ajax({
+                         type:"Post",
+                         //后台获取数据的函数，注意当对该页面重命名时，
+                          //必须手动更改该选项
+                           url: "/createOffer",
+							data:JSON.stringify({"issuer":{{.issuer}},
+								"code":{{.code}},
+								"price": type == "BUY" ? $("#buy_price").val() : $("#sell_price").val(),
+								"amount": type == "BUY" ? $("#buy_amount").val() : $("#sell_amount").val(),
+								"type": type,
+							}),
+                           contentType:"application/json; charset=utf-8",
+                           dataType:"json",
+                           //成功获取数据
+                           success:function (data){
+							if (data.Ret == 0)
+							{
+								alert("发送成功");
+							} else {
+								alert(data.Reason);
+							}
+                           },
+                           //显示错误                                       
+                           error:function (err){
+                            alert(err + "调用后台程序出现错误，请尝试刷新！");
+                        }
+                     });
+                }   
+
+                function cancelOffer(offerid){
+                    $.ajax({
+                         type:"Post",
+                         //后台获取数据的函数，注意当对该页面重命名时，
+                          //必须手动更改该选项
+                           url: "/cancelOffer",
+							data:JSON.stringify({"issuer":{{.issuer}},
+								"code":{{.code}},
+								"price": "0.0001",
+								"amount": "0.0001",
+								"iD": offerid,
+							}),
+                           contentType:"application/json; charset=utf-8",
+                           dataType:"json",
+                           //成功获取数据
+                           success:function (data){
+							if (data.Ret == 0)
+							{
+								refreshOffer();
+							} else {
+								alert(data.Reason);
+							}
+                           },
+                           //显示错误                                       
+                           error:function (err){
+                            alert(err + "调用后台程序出现错误，请尝试刷新！");
+                        }
+                     });
+                }   
+
+
+	</script>
+
+</html>

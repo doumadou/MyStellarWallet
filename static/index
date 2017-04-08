@@ -1,0 +1,55 @@
+<html ng-app="myApp" class="ng-scope"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+
+    <title>StellarWallet</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="/css/auth.css">
+	<link rel="stylesheet" href="/css/balance.css">
+	<link rel="stylesheet" href="/css/history.css">
+	<link rel="stylesheet" href="/css/trade.css">
+<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/angular-route.min.js"></script>
+	<script src="/js/angular-translate.min.js"></script>
+
+	<script src="/js/underscore-min.js"></script>
+</head>
+
+<body>
+  <!-- ngInclude: 'pages/header.html' --><div ng-include="'pages/header.html'" class="ng-scope"><div ng-controller="HeaderCtrl" class="ng-scope">
+    <header ng-show="!showMenu" class="auth">
+      <h1 translate="header_wellcome" class="ng-scope">恒星，分布式的全球支付网络</h1>
+    </header>
+    
+  <!-- ngView: --><div class="container ng-scope" ng-view="">
+<section class="col-xs-12 content ng-scope" ng-controller="LoginCtrl">
+  <div class="auth-attention text-center ng-scope" translate="login_desc">若不使用密钥登陆，则查看账户相关信息。刚创建的账号余额为0，需要先给账号充值20XLM之后才能激活账号。</div>
+  <div class="row col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
+    <div class="auth-form-wrapper">
+      <form name="loginForm" ng-disabled="loginForm.$invalid" action="/index" class="ng-pristine ng-invalid ng-invalid-required" method="post">
+        <h2 translate="open_account" class="ng-scope">登陆账户</h2>
+        <div class="form-group">
+          <label for="login_walletfile" translate="select_file" class="ng-scope">账号</label>
+          <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="login_walletfile" name="username" type="text" ng-model="walletfile">
+        </div>
+        <div class="form-group">
+          <label for="login_password" translate="account_password" class="ng-scope">密码</label>
+          <input class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" id="login_password" type="password" ng-model="password" name="password">
+        </div>
+        <div class="text-error ng-hide" ng-show="error"><br><span class="ng-binding"></span></div>
+        <div class="text-status ng-hide" ng-show="status"><span class="ng-binding"></span>
+          <!-- ngRepeat: message in backendMessages -->
+        </div>
+        <div class="submit-btn-container">
+          <button class="btn btn-submit btn-block btn-success" type="submit" ><span translate="open_account" class="ng-scope">登陆账户</span></button>
+        <a href="/created"> 创建新账号</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section></div>
+
+</body></html>

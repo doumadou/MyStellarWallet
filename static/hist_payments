@@ -1,0 +1,120 @@
+<html ng-app="myApp" class="ng-scope"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+    <title>StellarWallet</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="/css/auth.css">
+	<link rel="stylesheet" href="/css/balance.css">
+	<link rel="stylesheet" href="/css/history.css">
+	<link rel="stylesheet" href="/css/trade.css">
+<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/angular-route.min.js"></script>
+	<script src="/js/angular-translate.min.js"></script>
+
+	<script src="/js/underscore-min.js"></script>
+</head>
+
+<body>
+  <!-- ngInclude: 'pages/header.html' --><div ng-include="'pages/header.html'" class="ng-scope"><div ng-controller="HeaderCtrl" class="ng-scope">
+    <header ng-show="!showMenu" class="auth ng-hide">
+      <h1 translate="header_wellcome" class="ng-scope">恒星，分布式的全球支付网络</h1>
+    </header>
+    
+	<nav class="navbar navbar-inverse" ng-show="showMenu">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>                        
+	      </button>
+	      <a class="navbar-brand" href="#">恒星钱包</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+	      <ul class="nav navbar-nav">
+	        <li class="dropdown">
+	          <a class="dropdown-toggle ng-binding" data-toggle="dropdown" href="javascript:" aria-expanded="false">历史 <span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="/hist_payments" ng-click="goTo('/hist_payments')" class="ng-binding">转账</a></li>
+	            <li><a href="/hist_trades" ng-click="goTo('/hist_trades')" class="ng-binding">所有操作</a></li>
+	          </ul>
+	        </li>
+	        <li ng-class="{active:isActive('/trade')}" class=""><a href="/trade" ng-click="goTo('/trade')" class="ng-binding">交易</a></li>
+	        <li ng-class="{active:isActive('/balance')}" class=""><a href="/wallet" ng-click="goTo('/balance')" class="ng-binding">余额</a></li>
+	        <li ng-class="{active:isActive('/send')}" class=""><a href="/send" ng-click="goTo('/send')" class="ng-binding">发送</a></li>
+	        <li ng-class="{active:isActive('/trust')}" class=""><a href="/trust" ng-click="goTo('/trust')" class="ng-binding">授信</a></li>
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="javascript:" ng-click="goTo('/security')" title="{{.usr.UserName}}" class="ng-binding"><span class="glyphicon glyphicon-user"></span>{{.user.UserName}}</a></li>
+	        <li><a href="/logout" ng-click="goTo('/settings')" class="ng-binding"><span class="glyphicon glyphicon-cog"></span>退出</a></li>
+	      </ul>
+	    </div>
+	  </div>
+	</nav>
+</div></div>
+  <!-- ngView: --><div class="container ng-scope" ng-view=""><section class="col-xs-12 content ng-scope">
+	<group ng-show="loadState.account || true">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header ng-binding">最近收付记录
+				<a class="btn btn-success btn-sm ng-binding" onclick="window.location.reload()" ng-disabled="working">
+					<span class="glyphicon glyphicon-refresh"></span> 刷新</a>
+				
+			</div>
+			<div class="AddTrustFromDirectory">
+				{{if .error}}
+				<div class="s-alert s-alert--alert" ng-show="error_msg">
+						<ul class="AddTrust__errorList">
+							<li class="ng-binding">Network Error</li>
+						</ul>
+				</div>
+				{{end}}
+				
+				<div class="feed">
+					<!-- ngRepeat: item in trades -->
+					{{range .records }}
+						<div>
+						{{if eq .Type "create_account"}}
+							<span style="color:green">+{{.Starting_balance}}</span>
+							<span>&nbsp;XLM</span>
+							<span>&nbsp;{{.Type}}({{.Id}})</span></br>
+							<span>{{.Source_account}} -> 你</span></br>
+						{{else}}
+							{{if eq $.user.UserName .Source_account}}
+								<span style="color:red">-{{.Amount}}</span>
+								{{if eq .Asset_type "native"}}
+									<span>&nbsp;XML</span>
+								{{else}}
+									<span>&nbsp;{{.Asset_type}}</span>
+								{{end}}
+								<span>&nbsp;{{.Type}}({{.Id}})</span></br>
+								<span>你 -> {{.To}}</span>
+							{{else}}
+								<span style="color:green">+{{.Amount}}</span>
+								{{if eq .Asset_type "native"}}
+									<span>&nbsp;XML</span>
+								{{else}}
+									<span>&nbsp;{{.Asset_type}}</span>
+								{{end}}
+								<span>&nbsp;{{.Type}}({{.Id}})</span></br>
+								<span>{{.Source_account}} -> 你</span></br>
+							{{end}}
+						{{end}}
+						</div>
+					{{end}}
+				</div>
+
+        	</div>
+		</div>
+	</div>
+	</group>
+</section></div>
+<!-- footer-->
+</div>
+</div>
+
+
+</body></html>
